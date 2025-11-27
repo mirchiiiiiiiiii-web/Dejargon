@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dejargon - Understand Your Contracts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="text-2xl font-bold text-gray-900">Dejargon</div>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#about" class="text-gray-700 hover:text-gray-900">About Us</a>
+                <a href="#pricing" class="text-gray-700 hover:text-gray-900">Pricing</a>
+                <a href="#resources" class="text-gray-700 hover:text-gray-900">Resources</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button class="px-5 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 font-medium">
+                    Login
+                </button>
+                <button class="px-5 py-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 font-medium">
+                    Get started
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-6 py-16 md:py-24">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <!-- Left Column -->
+            <div>
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                    Would You Sign <span class="text-blue-900">Without</span> Knowing the Risks?
+                </h1>
+                <p class="text-xl text-gray-600 mb-8">
+                    Upload any agreement and instantly see what's good, what's risky, and how to fix it — before you commit.
+                </p>
+
+                <!-- Upload Area -->
+                <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center bg-white transition-all hover:border-blue-900 hover:bg-blue-50">
+                    <div class="mb-4">
+                        <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 mb-2 font-medium">
+                        Drop your contract here or choose a file.
+                    </p>
+                    <p class="text-gray-500 text-sm mb-6">
+                        PDF & DOCX only. Max 5MB file size.
+                    </p>
+                    <input type="file" id="fileInput" accept=".pdf,.docx" class="hidden">
+                    <button onclick="document.getElementById('fileInput').click()" class="px-8 py-3 bg-blue-900 text-white rounded-full hover:bg-blue-800 font-medium text-lg">
+                        Upload your Document
+                    </button>
+                    <div class="flex items-center justify-center gap-2 mt-4 text-gray-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                        <span class="text-sm font-medium">Privacy guaranteed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Illustration -->
+            <div class="hidden md:flex justify-center">
+                <div class="relative">
+                    <div class="bg-blue-900 rounded-3xl p-8 shadow-2xl transform rotate-3 w-80 h-96">
+                        <div class="bg-white rounded-2xl h-full flex flex-col items-center justify-center p-6">
+                            <svg class="w-24 h-24 text-blue-900 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <div class="w-full space-y-3">
+                                <div class="h-3 bg-gray-200 rounded w-3/4"></div>
+                                <div class="h-3 bg-gray-200 rounded w-full"></div>
+                                <div class="h-3 bg-gray-200 rounded w-2/3"></div>
+                            </div>
+                            <div class="mt-6 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+                                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -bottom-4 -left-4 bg-yellow-400 rounded-full p-3">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-white py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                    Know What You're Signing
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Get instant clarity on complex legal agreements without hiring a lawyer for every contract.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-2xl p-8">
+                    <div class="w-12 h-12 bg-blue-900 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Instant Analysis</h3>
+                    <p class="text-gray-600">
+                        Upload your contract and get a comprehensive risk score and clause-by-clause breakdown in seconds.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-8">
+                    <div class="w-12 h-12 bg-blue-900 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Spot Hidden Risks</h3>
+                    <p class="text-gray-600">
+                        Our AI flags unfair terms, liability traps, and sketchy clauses that could cost you later.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-8">
+                    <div class="w-12 h-12 bg-blue-900 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Get Suggested Fixes</h3>
+                    <p class="text-gray-600">
+                        Receive plain-English explanations and alternative phrasings to negotiate better terms.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-blue-900 py-16 md:py-24">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                Stop Signing Blind
+            </h2>
+            <p class="text-xl text-blue-100 mb-8">
+                Join hundreds of founders, freelancers, and small businesses who review contracts confidently.
+            </p>
+            <button class="px-8 py-4 bg-white text-blue-900 rounded-full hover:bg-gray-100 font-bold text-lg shadow-xl">
+                Analyze Your First Contract Free
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="text-white font-bold text-xl mb-4">Dejargon</div>
+                    <p class="text-sm">Making contracts readable for everyone.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Features</a></li>
+                        <li><a href="#" class="hover:text-white">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white">API</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">About</a></li>
+                        <li><a href="#" class="hover:text-white">Blog</a></li>
+                        <li><a href="#" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Privacy</a></li>
+                        <li><a href="#" class="hover:text-white">Terms</a></li>
+                        <li><a href="#" class="hover:text-white">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-sm text-center">
+                © 2024 Dejargon. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Drag and drop functionality
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('border-blue-900', 'bg-blue-50');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('border-blue-900', 'bg-blue-50');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        fileInput.addEventListener('change', function(e) {
+            handleFiles(this.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                // For now, just alert - we'll add real functionality later
+                alert(`File selected: ${file.name}\n\nNext step: We'll connect this to payment and processing!`);
+            }
+        }
+    </script>
+</body>
+</html>
