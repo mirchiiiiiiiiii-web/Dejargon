@@ -1,255 +1,671 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dejargon - Understand Your Contracts</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Dejargon – Risk Report MVP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- React + Babel from CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fbfaf5;
+      color: #060606;
+    }
+    a { text-decoration: none; color: inherit; }
+    /* Top nav */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 64px;
+      background: #fbfaf5;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 24px;
+      color: #020617;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      font-size: 16px;
+      color: #374151;
+    }
+    .nav-actions {
+      display: flex;
+      gap: 16px;
+    }
+    .btn {
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+    }
+    .btn-outline {
+      border-color: #0b2a5b;
+      color: #0b2a5b;
+      background: #fbfaf5;
+    }
+    .btn-primary {
+      background: #0b2a5b;
+      color: #ffffff;
+    }
+    /* Landing hero */
+    .hero {
+      display: flex;
+      padding: 64px;
+      gap: 40px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hero-left {
+      max-width: 560px;
+    }
+    .hero-title {
+      font-size: 44px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: #020617;
+      margin-bottom: 20px;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+      color: #4b5563;
+      margin-bottom: 32px;
+    }
+    .upload-card {
+      border-radius: 16px;
+      border: 1px dashed #cbd5e1;
+      background: #ffffff;
+      padding: 32px 32px 24px;
+      max-width: 460px;
+    }
+    .upload-card p {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 16px;
+    }
+    .upload-button {
+      background: #0b2a5b;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .upload-footnote {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #4b5563;
+    }
+    .hero-illustration {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    .hero-illustration-placeholder {
+      width: 340px;
+      height: 260px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #e0ecff, #f4f4ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b2a5b;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    /* Scanning */
+    .scan-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 16px;
+      font-size: 20px;
+      color: #0b2a5b;
+      gap: 16px;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 4px solid #d1d5db;
+      border-top-color: #0b2a5b;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    /* Dashboard layout */
+    .dashboard-wrapper {
+      padding: 32px 48px 48px;
+      background: #f5efe0;
+      min-height: calc(100vh - 72px);
+    }
+    .dashboard-header {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .upload-new-btn,
+    .download-btn {
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid #0b2a5b;
+      background: #ffffff;
+      color: #0b2a5b;
+      cursor: pointer;
+    }
+    .download-btn {
+      background: #0b2a5b;
+      color: #ffffff;
+    }
+    .dashboard-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 32px;
+    }
+    .clauses-panel {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px 24px 32px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      overflow-y: auto;
+      max-height: calc(100vh - 180px);
+    }
+    .clauses-panel h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .clause-item {
+      margin-bottom: 16px;
+    }
+    .clause-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .clause-text {
+      font-size: 13px;
+      color: #111827;
+      line-height: 1.5;
+    }
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px 24px 24px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .summary-box {
+      background: #f4eddd;
+      border-radius: 16px;
+      box-shadow: inset 0 0 10px 2px rgba(0,0,0,0.2);
+      padding: 16px 16px 12px;
+      font-size: 14px;
+      color: #101010;
+      line-height: 1.45;
+      position: relative;
+    }
+    .highlights-list {
+      margin-top: 10px;
+      padding-left: 16px;
+    }
+    .highlights-list li {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .copy-pill {
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      border-radius: 999px;
+      border: 1px solid #303030;
+      padding: 4px 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      background: #fefcf7;
+    }
+    .issues-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .issue-item {
+      border-left: 4px solid #e87928;
+      background: #fff7ed;
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .issue-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: #92400e;
+    }
+    .issue-desc {
+      font-size: 13px;
+      color: #7c2d12;
+    }
+    @media (max-width: 960px) {
+      .nav { padding: 16px 20px; }
+      .hero { padding: 32px 20px; flex-direction: column; }
+      .dashboard-wrapper { padding: 24px 16px 40px; }
+      .dashboard-main { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div class="text-2xl font-bold text-gray-900">Dejargon</div>
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#about" class="text-gray-700 hover:text-gray-900">About Us</a>
-                <a href="#pricing" class="text-gray-700 hover:text-gray-900">Pricing</a>
-                <a href="#resources" class="text-gray-700 hover:text-gray-900">Resources</a>
-            </div>
-            <div class="flex items-center gap-3">
-                <button class="px-5 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 font-medium">
-                    Login
-                </button>
-                <button class="px-5 py-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 font-medium">
-                    Get started
-                </button>
-            </div>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const RiskGauge = ({ score, label }) => {
+      const clamped = Math.max(0, Math.min(100, score));
+      const r = 80;
+      const circumference = 2 * Math.PI * r;
+      const visibleArc = circumference * 0.75;
+      const offset = visibleArc * (1 - clamped / 100);
+
+      let arcColor = "#10b981";
+      if (clamped >= 41 && clamped <= 69) arcColor = "#f59e0b";
+      else if (clamped >= 70) arcColor = "#ef4444";
+
+      const labelColor =
+        clamped <= 40 ? "#10b981" : clamped <= 69 ? "#f59e0b" : "#ef4444";
+
+      return (
+        <div style={{ textAlign: "center", paddingTop: 8, paddingBottom: 12 }}>
+          <div
+            style={{
+              fontFamily: "Lato, system-ui, sans-serif",
+              fontWeight: 700,
+              fontSize: 24,
+              lineHeight: "29px",
+              color: "#060606",
+              marginBottom: 4,
+            }}
+          >
+            Your Score
+          </div>
+          <svg
+            viewBox="0 0 360 220"
+            role="img"
+            aria-label="Risk meter"
+            style={{ width: "100%", maxWidth: 360, height: 220, margin: "0 auto" }}
+          >
+            <g transform="translate(180,140)">
+              <g transform="rotate(-135)">
+                ircle
+                  r={r}
+                  fill="none"
+                  stroke="#ef6c4b"
+                  strokeWidth="14"
+                  strokeDasharray={`${visibleArc * 0.25} ${circumference}`}
+                  strokeLinecap="round"
+                />
+                ircle
+                  r={r}
+                  fill="none"
+                  stroke="#f59e3b"
+                  strokeWidth="14"
+                  strokeDasharray={`${visibleArc * 0.25} ${circumference}`}
+                  strokeDashoffset={-visibleArc * 0.25}
+                  strokeLinecap="round"
+                />
+                ircle
+                  r={r}
+                  fill="none"
+                  stroke="#18a661"
+                  strokeWidth="14"
+                  strokeDasharray={`${visibleArc * 0.5} ${circumference}`}
+                  strokeDashoffset={-visibleArc * 0.5}
+                  strokeLinecap="round"
+                />
+
+                ircle
+                  r={r}
+                  fill="none"
+                  stroke={arcColor}
+                  strokeWidth="10"
+                  strokeLinecap="round"
+                  strokeDasharray={`${visibleArc} ${circumference}`}
+                  strokeDashoffset={offset}
+                  style={{
+                    transition:
+                      "stroke-dashoffset 800ms cubic-bezier(.22,.9,.2,1), stroke 300ms ease",
+                  }}
+                />
+              </g>
+
+              <text
+                x="-140"
+                y="10"
+                fontSize="10"
+                fill="#000"
+                transform="rotate(-90 -140 10)"
+              >
+                0
+              </text>
+              <text
+                x="-55"
+                y="-95"
+                fontSize="10"
+                fill="#000"
+                transform="rotate(-31 -55 -95)"
+              >
+                25
+              </text>
+              <text
+                x="75"
+                y="-95"
+                fontSize="10"
+                fill="#000"
+                transform="rotate(31 75 -95)"
+              >
+                50
+              </text>
+              <text x="140" y="10" fontSize="10" fill="#000">
+                100
+              </text>
+
+              <text
+                x="0"
+                y="0"
+                fontFamily="Lato, system-ui, sans-serif"
+                fontWeight="800"
+                fontSize="72"
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill={labelColor}
+              >
+                {clamped}
+              </text>
+
+              <g transform="translate(0,75)">
+                <line
+                  x1="-150"
+                  y1="0"
+                  x2="-25"
+                  y2="0"
+                  stroke="#5C3F00"
+                  strokeWidth="0.5"
+                />
+                <rect
+                  x="-45"
+                  y="-10"
+                  width="190"
+                  height="20"
+                  rx="100"
+                  fill={labelColor}
+                />
+                <text
+                  x="50"
+                  y="0"
+                  fontFamily="Lato, system-ui, sans-serif"
+                  fontWeight="700"
+                  fontSize="12"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fill="#ffffff"
+                >
+                  {label}
+                </text>
+                <line
+                  x1="75"
+                  y1="0"
+                  x2="150"
+                  y2="0"
+                  stroke="#5C3F00"
+                  strokeWidth="0.5"
+                />
+              </g>
+            </g>
+          </svg>
         </div>
-    </nav>
+      );
+    };
 
-    <!-- Hero Section -->
-    <section class="max-w-7xl mx-auto px-6 py-16 md:py-24">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-            <!-- Left Column -->
-            <div>
-                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                    Would You Sign <span class="text-blue-900">Without</span> Knowing the Risks?
-                </h1>
-                <p class="text-xl text-gray-600 mb-8">
-                    Upload any agreement and instantly see what's good, what's risky, and how to fix it — before you commit.
-                </p>
+    const Dashboard = ({ analysisData, onBack }) => {
+      const { score, scoreLabel, summary, highlights, issues, clauses } =
+        analysisData || {};
 
-                <!-- Upload Area -->
-                <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center bg-white transition-all hover:border-blue-900 hover:bg-blue-50">
-                    <div class="mb-4">
-                        <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                        </svg>
-                    </div>
-                    <p class="text-gray-700 mb-2 font-medium">
-                        Drop your contract here or choose a file.
-                    </p>
-                    <p class="text-gray-500 text-sm mb-6">
-                        PDF & DOCX only. Max 5MB file size.
-                    </p>
-                    <input type="file" id="fileInput" accept=".pdf,.docx" class="hidden">
-                    <button onclick="document.getElementById('fileInput').click()" class="px-8 py-3 bg-blue-900 text-white rounded-full hover:bg-blue-800 font-medium text-lg">
-                        Upload your Document
-                    </button>
-                    <div class="flex items-center justify-center gap-2 mt-4 text-gray-600">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                        </svg>
-                        <span class="text-sm font-medium">Privacy guaranteed</span>
-                    </div>
-                </div>
-            </div>
+      const copySummary = () => {
+        if (navigator.clipboard && summary) {
+          navigator.clipboard.writeText(summary);
+        }
+      };
 
-            <!-- Right Column - Illustration -->
-            <div class="hidden md:flex justify-center">
-                <div class="relative">
-                    <div class="bg-blue-900 rounded-3xl p-8 shadow-2xl transform rotate-3 w-80 h-96">
-                        <div class="bg-white rounded-2xl h-full flex flex-col items-center justify-center p-6">
-                            <svg class="w-24 h-24 text-blue-900 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            <div class="w-full space-y-3">
-                                <div class="h-3 bg-gray-200 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-200 rounded w-full"></div>
-                                <div class="h-3 bg-gray-200 rounded w-2/3"></div>
-                            </div>
-                            <div class="mt-6 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
-                                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute -bottom-4 -left-4 bg-yellow-400 rounded-full p-3">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="bg-white py-16 md:py-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">
-                    Know What You're Signing
-                </h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Get instant clarity on complex legal agreements without hiring a lawyer for every contract.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-gray-50 rounded-2xl p-8">
-                    <div class="w-12 h-12 bg-blue-900 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Instant Analysis</h3>
-                    <p class="text-gray-600">
-                        Upload your contract and get a comprehensive risk score and clause-by-clause breakdown in seconds.
-                    </p>
-                </div>
-
-                <div class="bg-gray-50 rounded-2xl p-8">
-                    <div class="w-12 h-12 bg-blue-900 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Spot Hidden Risks</h3>
-                    <p class="text-gray-600">
-                        Our AI flags unfair terms, liability traps, and sketchy clauses that could cost you later.
-                    </p>
-                </div>
-
-                <div class="bg-gray-50 rounded-2xl p-8">
-                    <div class="w-12 h-12 bg-blue-900 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Get Suggested Fixes</h3>
-                    <p class="text-gray-600">
-                        Receive plain-English explanations and alternative phrasings to negotiate better terms.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="bg-blue-900 py-16 md:py-24">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-                Stop Signing Blind
-            </h2>
-            <p class="text-xl text-blue-100 mb-8">
-                Join hundreds of founders, freelancers, and small businesses who review contracts confidently.
-            </p>
-            <button class="px-8 py-4 bg-white text-blue-900 rounded-full hover:bg-gray-100 font-bold text-lg shadow-xl">
-                Analyze Your First Contract Free
+      return (
+        <div className="dashboard-wrapper">
+          <div className="dashboard-header">
+            <button className="upload-new-btn" onClick={onBack}>
+              Upload New
             </button>
-        </div>
-    </section>
+            <button className="download-btn">Download Report</button>
+          </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-12">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <div class="text-white font-bold text-xl mb-4">Dejargon</div>
-                    <p class="text-sm">Making contracts readable for everyone.</p>
+          <div className="dashboard-main">
+            <div className="clauses-panel">
+              <h2>Payment Terms & Key Clauses</h2>
+              {clauses.map((c, idx) => (
+                <div key={idx} className="clause-item">
+                  <div className="clause-title">{c.title}</div>
+                  <div className="clause-text">{c.text}</div>
                 </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Product</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white">Features</a></li>
-                        <li><a href="#" class="hover:text-white">Pricing</a></li>
-                        <li><a href="#" class="hover:text-white">API</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Company</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white">About</a></li>
-                        <li><a href="#" class="hover:text-white">Blog</a></li>
-                        <li><a href="#" class="hover:text-white">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Legal</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white">Privacy</a></li>
-                        <li><a href="#" class="hover:text-white">Terms</a></li>
-                        <li><a href="#" class="hover:text-white">Security</a></li>
-                    </ul>
-                </div>
+              ))}
             </div>
-            <div class="border-t border-gray-800 pt-8 text-sm text-center">
-                © 2024 Dejargon. All rights reserved.
+
+            <div className="right-panel">
+              <div className="card">
+                <RiskGauge score={score} label={scoreLabel} />
+              </div>
+
+              <div className="card">
+                <div className="card-title">Summary</div>
+                <div className="summary-box">
+                  {summary}
+                  {highlights && highlights.length > 0 && (
+                    <ul className="highlights-list">
+                      {highlights.map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="copy-pill" onClick={copySummary}>
+                    <span style={{ fontSize: 16 }}>📋</span>
+                    <span>Copy</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-title">
+                  {issues.length} Major Issues Found
+                </div>
+                <div className="issues-list">
+                  {issues.map((issue) => (
+                    <div key={issue.id} className="issue-item">
+                      <div className="issue-title">{issue.title}</div>
+                      <div className="issue-desc">{issue.description}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </footer>
+      );
+    };
 
-    <script>
-        // Drag and drop functionality
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
+    const mockAnalysisData = {
+      score: 82,
+      scoreLabel: "Safe",
+      summary:
+        "This Agreement outlines the commercial terms between the Client and the Service Provider. It defines payment timelines, service termination rights, liability exposure, confidentiality, governing law, dispute resolution, intellectual property ownership, and exceptions for force majeure events.",
+      highlights: [
+        "Payment Terms: 90-day cycle with interest on late payments.",
+        "Termination: Either party can exit with only 1-day notice.",
+        "Unlimited liability and litigation-only dispute resolution need negotiation."
+      ],
+      issues: [
+        {
+          id: 1,
+          title: "Termination Flexibility",
+          description:
+            "Either party can terminate with 1-day notice. This creates instability and little protection if work is in progress."
+        },
+        {
+          id: 2,
+          title: "Unlimited Liability",
+          description:
+            "The Service Provider is liable for all types of damages without any liability cap, creating significant financial risk."
+        },
+        {
+          id: 3,
+          title: "Long Payment Terms",
+          description:
+            "A 90-day payment cycle can cause cash-flow problems for the Service Provider if invoices are delayed."
         }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => {
-                dropZone.classList.add('border-blue-900', 'bg-blue-50');
-            }, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => {
-                dropZone.classList.remove('border-blue-900', 'bg-blue-50');
-            }, false);
-        });
-
-        dropZone.addEventListener('drop', handleDrop, false);
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            handleFiles(files);
+      ],
+      clauses: [
+        {
+          title: "Payment Terms",
+          text:
+            "The Client shall pay the Service Provider within 90 (ninety) days from the date of receipt of an undisputed invoice. Any invoice not paid within such period shall accrue interest at the rate specified in the Agreement."
+        },
+        {
+          title: "Termination",
+          text:
+            "Either Party may terminate this Agreement at any time, with or without cause, upon providing one (1) day's written notice to the other Party. Upon termination, the Client shall promptly settle all outstanding payments, including for partially completed work."
+        },
+        {
+          title: "Limitation of Liability",
+          text:
+            "The Service Provider shall be liable for all damages, losses, costs, and expenses of any nature, including but not limited to direct, indirect, incidental, special, consequential, and punitive damages, without limitation as to amount."
+        },
+        {
+          title: "Confidentiality",
+          text:
+            "The Service Provider agrees not to disclose any confidential or proprietary information of the Client to any third party, except to its affiliates, contractors, or advisors who require such information in connection with the services."
         }
+      ]
+    };
 
-        fileInput.addEventListener('change', function(e) {
-            handleFiles(this.files);
-        });
+    const App = () => {
+      const [stage, setStage] = useState("landing"); // landing | scanning | dashboard
+      const [analysisData, setAnalysisData] = useState(null);
 
-        function handleFiles(files) {
-            if (files.length > 0) {
-                const file = files[0];
-                // For now, just alert - we'll add real functionality later
-                alert(`File selected: ${file.name}\n\nNext step: We'll connect this to payment and processing!`);
-            }
-        }
-    </script>
+      const handleUploadClick = () => {
+        setStage("scanning");
+        setTimeout(() => {
+          setAnalysisData(mockAnalysisData);
+          setStage("dashboard");
+        }, 1800);
+      };
+
+      const handleBack = () => {
+        setAnalysisData(null);
+        setStage("landing");
+      };
+
+      return (
+        <>
+          <header className="nav">
+            <div className="nav-left">
+              <span style={{ fontSize: 24 }}>Dejargon</span>
+            </div>
+            <div className="nav-links">
+              <span>About Us</span>
+              <span>Pricing</span>
+              <span>Resources</span>
+            </div>
+            <div className="nav-actions">
+              <button className="btn btn-outline">Login</button>
+              <button className="btn btn-primary">Get started</button>
+            </div>
+          </header>
+
+          {stage === "landing" && (
+            <main className="hero">
+              <div className="hero-left">
+                <h1 className="hero-title">
+                  Would You Sign Without Knowing the Risks?
+                </h1>
+                <p className="hero-subtitle">
+                  Upload any agreement and instantly see what&apos;s good,
+                  what&apos;s risky, and how to fix it — before you commit.
+                </p>
+                <div className="upload-card">
+                  <p>Drop your agreement here or choose a file.</p>
+                  <p>PDF &amp; DOCX only. Max 5MB file size.</p>
+                  <button className="upload-button" onClick={handleUploadClick}>
+                    Upload your Document
+                  </button>
+                  <div className="upload-footnote">
+                    <span>🔒</span>
+                    <span>Privacy guaranteed</span>
+                  </div>
+                </div>
+              </div>
+              <div className="hero-illustration">
+                <div className="hero-illustration-placeholder">
+                  Contract Preview
+                </div>
+              </div>
+            </main>
+          )}
+
+          {stage === "scanning" && (
+            <main className="scan-screen">
+              <div className="spinner"></div>
+              <div>Scanning your Agreement</div>
+            </main>
+          )}
+
+          {stage === "dashboard" && analysisData && (
+            <Dashboard analysisData={analysisData} onBack={handleBack} />
+          )}
+        </>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 </html>
