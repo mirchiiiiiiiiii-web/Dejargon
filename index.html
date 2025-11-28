@@ -587,30 +587,33 @@
       ]
     };
 
-  const handleUploadClick = async () => {
-    const text = window.prompt("Paste contract text for analysis:");
-    if (!text) return;
+    const App = () => {
+      const [stage, setStage] = useState("landing"); // landing | scanning | dashboard
+      const [analysisData, setAnalysisData] = useState(null);
 
-    setStage("scanning");
+      const handleUploadClick = async () => {
+        const text = window.prompt("Paste contract text for analysis:");
+        if (!text) return;
 
-    try {
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contractText: text })
-      });
+        setStage("scanning");
 
-      if (!res.ok) throw new Error("API error");
-      const data = await res.json();
-      setAnalysisData(data);
-      setStage("dashboard");
-    } catch (e) {
-      console.error(e);
-      // fallback so UI still works if API fails
-      setAnalysisData(mockAnalysisData);
-      setStage("dashboard");
-    }
-  };
+        try {
+          const res = await fetch("/api/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contractText: text })
+          });
+
+          if (!res.ok) throw new Error("API error");
+          const data = await res.json();
+          setAnalysisData(data);
+          setStage("dashboard");
+        } catch (e) {
+          console.error(e);
+          setAnalysisData(mockAnalysisData);
+          setStage("dashboard");
+        }
+      };
 
       const handleBack = () => {
         setAnalysisData(null);
